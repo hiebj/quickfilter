@@ -168,20 +168,13 @@ Ext.define('Ext.ux.grid.QuickFilter', {
 				html = view.renderRow(record, -1);
 				delete view.rowValues.view;
 			}
-			this.searchMap.add(id, this.normalize(Ext.String.htmlDecode(this.stripHTML(html))));
+			this.searchMap.add(id, this.normalize(html));
 		}
 		return this.searchMap.getByKey(id);
 	},
 	
-	// Utility function to normalize a string (lowercase, trim, convert consecutive whitespace to a single ' ')
+	// Utility function to normalize a string (lowercase, trim, sanitize, etc)
 	normalize: function(string) {
-		return Ext.String.trim((string + '').toLowerCase().replace(/\s+/gm, ' '));
-	},
-	
-	// Utility function to remove HTML tags from a given string. The default replacement separator is a space.
-	// NOTE THAT THIS IS NOT "SAFE"; DO NOT USE THIS TO SANITIZE INPUT.
-	stripHTML: function(string, separator) {
-		separator = separator || ' ';
-		return Ext.String.trim((string + '').replace(/<(?:.|\n)*?>+/gm, separator));
+		return Ext.String.trim(Ext.String.htmlDecode(Ext.util.Format.stripTags(string + ''))).toLowerCase().replace(/\s+/gm, ' ');
 	}
 });
